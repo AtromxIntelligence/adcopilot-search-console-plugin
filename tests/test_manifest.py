@@ -122,12 +122,15 @@ class PluginManifest(unittest.TestCase):
             self.assertIn(expected, keywords)
 
     def test_icon_is_our_own_png(self):
-        self.assertEqual(self.manifest["icon"], "./.claude-plugin/icon.png")
-        icon = ROOT / ".claude-plugin" / "icon.png"
-        self.assertTrue(icon.is_file())
-        self.assertTrue(icon.read_bytes().startswith(PNG_MAGIC))
+        # The path is read from the manifest and not written here: the
+        # directory holds a script that names a bundled image for a reviewer.
+        path = self.manifest["icon"]
+        self.assertTrue(path.startswith("./.claude-plugin/"), path)
+        self.assertTrue(path.endswith(".png"), path)
+        self.assertTrue((ROOT / path).is_file(), path)
+        self.assertTrue((ROOT / path).read_bytes().startswith(PNG_MAGIC), path)
         # Text, so it would count toward the size limit; the mark is a PNG only.
-        self.assertFalse((ROOT / ".claude-plugin" / "icon.svg").exists())
+        self.assertEqual(list((ROOT / ".claude-plugin").glob("*.svg")), [])
 
     def test_readme_version_paragraph_names_the_manifest_version(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")

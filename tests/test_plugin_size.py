@@ -115,7 +115,7 @@ class PluginSize(unittest.TestCase):
             ("tests/too_big.py", limit + 1),      # one byte over: named
             ("README.md", limit),                 # exactly at the limit: fine
             ("skills/a/SKILL.md", 10),
-            (".claude-plugin/icon.png", limit * 10),  # an image: left alone
+            ("images/sample.png", limit * 10),        # an image: left alone
             ("fonts/Inter.woff2", limit * 10),        # a font: left alone
             ("docs/diagram.SVG", limit + 5),          # text, so counted
         ]

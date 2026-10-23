@@ -2,11 +2,11 @@
 
 SEO, Search Console, keywords, indexing and page experience from your AI client. AdCopilot reads your Google Search Console and shows which searches and pages earn clicks, the queries you nearly rank for, why a page is or is not indexed, whether Google reads your sitemap, and how mobile and desktop compare. It proposes any change first, such as submitting a sitemap, and makes it only on your yes.
 
-What works today, in full, through the AdCopilot connector:
+What works today through the AdCopilot connector:
 
 - **Search performance.** Which queries and pages earn clicks, by country and device (`gsc_search_analytics`): queries you nearly rank for (average position about 8 to 20), click-through gaps, and brand against non-brand. With Google Ads connected it adds Google's monthly search counts for the queries it names (`get_keyword_metrics`), labelled as estimates.
 - **Indexing and sitemaps.** Why a page is or is not indexed, in Google's own words, from `gsc_inspect_url`, sampled across your page families and never claimed for the whole site; and whether Google reads your sitemap, from `gsc_list_sitemaps`. A sitemap submit with `gsc_submit_sitemap` is proposed first and sent only on your yes.
-- **Page experience, as far as Search Console shows it.** Mobile against desktop clicks, click-through and position, and how Google crawled a page and which canonical it chose.
+- **Page experience, as far as Search Console's API shows it.** Mobile against desktop clicks, click-through and position, and how Google crawled a page and which canonical it chose.
 - **Paid against organic.** With Google Ads connected too, the searches you pay for that you already rank for, and the ones you rank for and never advertise on, from `paid_vs_organic`. It only reads.
 
 What AdCopilot cannot read today, and says so in every answer that needs it: Core Web Vitals and the HTTPS report (it reads what you paste from those reports), a site-wide count of indexed pages (it reads the export you paste from the Page indexing report), manual actions and security issues. Nothing in this plugin waits for a later connector, and this README promises nothing beyond the list above.
@@ -42,7 +42,7 @@ Signing in links your AdCopilot workspace, so you need an AdCopilot account. You
 
 ## Already use another AdCopilot plugin?
 
-There is one connector and one sign-in, whichever AdCopilot plugins you add. Every AdCopilot plugin points at the same address, so your AI client treats them as one connector. In Claude Code, `/mcp` shows the connector once, under whichever AdCopilot plugin loaded first. If Claude asks you to sign in again after you remove an AdCopilot plugin, run `/mcp` and sign in once.
+There is one connector and one AdCopilot account, whichever AdCopilot plugins you add. Every AdCopilot plugin points at the same address, so your AI client treats them as one connector. In Claude Code, `/mcp` shows the connector once, under whichever AdCopilot plugin loaded first, and the sign-in belongs to that entry. If Claude asks you to sign in again after you add or remove an AdCopilot plugin, run `/mcp` and sign in once.
 
 ## What you get
 

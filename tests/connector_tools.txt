@@ -2,8 +2,8 @@
 # Search Console, Google Analytics 4 and Google Tag Manager, plus get_org_context and
 # save_org_context. Taken from the connector's tool registry for AdCopilot v2.44.1 and
 # compared with the live connector's tool list on 2026-10-23: identical, 118 tools.
-# Three tools are left out on purpose, because they are switched off in production:
-# shopping_product_issues, lsa_leads and lsa_rate_lead. A skill must not name them.
+# Three tools are left out on purpose, because the live connector does not serve them
+# today: shopping_product_issues, lsa_leads and lsa_rate_lead. A skill must not name them.
 account_health_score
 add_account_negatives
 add_assets_to_asset_group

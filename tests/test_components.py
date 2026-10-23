@@ -15,7 +15,7 @@ Why each rule exists:
   value: a colon followed by a space, or a space and a hash.
 * Tool names. A skill that names a tool the connector does not serve sends the
   customer a promise nobody keeps. `connector_tools.txt` is the connector's
-  registry; three tools that are switched off in production are refused by name.
+  registry; three tools the live connector does not serve today are refused by name.
 * Bare names. The long namespaced form of a tool name, which carries the plugin's
   own name, belongs to whichever AdCopilot plugin Claude Code loaded first, so a
   skill that wrote it out would be wrong for anyone who has two AdCopilot plugins.
@@ -52,7 +52,7 @@ UNCONNECTED = "say what connecting it unlocks"
 # What this plugin says it cannot read, said in the README and by /setup.
 CANNOT_READ = ["Core Web Vitals", "HTTPS report", "manual actions",
                "security issues", "site-wide count"]
-# Tools that are switched off in production, or refused for every caller.
+# Tools the live connector does not serve today, or refuses for every caller.
 NOT_SERVED = {
     "shopping_product_issues", "lsa_leads", "lsa_rate_lead", "remove_ad",
     "remove_keyword", "remove_campaign_asset", "remove_asset_from_asset_group",
@@ -324,9 +324,9 @@ class Readme(unittest.TestCase):
     def test_it_holds_the_one_connector_one_sign_in_answer(self):
         text = flat(self.text)
         self.assertIn("Already use another AdCopilot plugin?", text)
-        self.assertIn("There is one connector and one sign-in, whichever AdCopilot "
-                      "plugins you add.", text)
-        self.assertIn("If Claude asks you to sign in again after you remove an "
+        self.assertIn("There is one connector and one AdCopilot account, whichever "
+                      "AdCopilot plugins you add.", text)
+        self.assertIn("If Claude asks you to sign in again after you add or remove an "
                       "AdCopilot plugin, run `/mcp` and sign in once.", text)
 
     def test_it_says_what_it_cannot_read_and_discloses_the_connector(self):
