@@ -1,0 +1,16 @@
+{
+  "name": "adcopilot-search-console-plugin",
+  "description": "AdCopilot for Google Search Console (SEO), for Claude Code: your searches, pages, indexing and sitemaps in the same chat, with each change proposed first.",
+  "owner": {
+    "name": "Atromx Intelligence",
+    "url": "https://adcopilot.cloud"
+  },
+  "plugins": [
+    {
+      "name": "adcopilot-search-console",
+      "source": "./",
+      "description": "SEO from your Google Search Console in your AI client: which searches and pages earn clicks, why a page is or is not indexed, and whether Google reads your sitemap.",
+      "category": "Marketing"
+    }
+  ]
+}

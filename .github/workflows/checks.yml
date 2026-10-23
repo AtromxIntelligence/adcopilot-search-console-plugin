@@ -1,0 +1,123 @@
+name: checks
+
+# The structural gates for this plugin, and the half that needs no credential of
+# any kind. It runs on every push to main and every pull request.
+#
+# It installs Claude Code from npm at a pinned version, never from a piped shell
+# installer: the plugin directory's scanner holds a download-and-execute pattern
+# anywhere in a repository, whoever published the script. `claude plugin
+# validate` reads local files and needs no sign-in, and is the only Claude Code
+# command used here. Nothing in this job drives a model or holds a secret.
+#
+# Each check below exists because something like it has gone wrong before; the
+# comment on each says what it catches.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  structural:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The version-against-tag check reads tags, which a shallow
+          # checkout does not fetch.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # Pinned, not `@latest`: a gate whose own tool changes under it reports
+      # yesterday's result as today's. 2.1.288 understands the directory's
+      # listing fields in plugin.json.
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code@2.1.288
+
+      # Both manifests, strictly. It reads files and needs no credential, which
+      # is what makes this whole job keyless.
+      - name: claude plugin validate --strict
+        run: |
+          set -euo pipefail
+          claude plugin validate . --strict
+          claude plugin validate .claude-plugin/plugin.json --strict
+
+      # A manifest that does not parse takes the plugin out of the directory,
+      # and `.mcp.json` not parsing takes the connector with it. Cheap, and it
+      # fires before the validator's own error has to be interpreted.
+      - name: Manifests parse
+        run: |
+          set -euo pipefail
+          for f in .claude-plugin/plugin.json .claude-plugin/marketplace.json .mcp.json; do
+            jq -e . "$f" >/dev/null \
+              || { echo "::error file=$f::does not parse as JSON"; exit 1; }
+            echo "ok  $f"
+          done
+
+      # A skill or command whose front matter lost its name or description
+      # stops being discoverable, and the validator checks the manifests, not
+      # the bodies.
+      - name: Every skill and command has name + description
+        run: |
+          set -euo pipefail
+          rc=0
+          for f in skills/*/SKILL.md commands/*.md; do
+            [ -e "$f" ] || continue
+            head -n 20 "$f" | grep -q '^name:'        || { echo "::error file=$f::frontmatter has no name:"; rc=1; }
+            head -n 20 "$f" | grep -q '^description:' || { echo "::error file=$f::frontmatter has no description:"; rc=1; }
+          done
+          [ "$rc" -eq 0 ] && echo "ok  all skills and commands carry name + description"
+          exit "$rc"
+
+      # The plugin's own text, checked without a model: the manifest values, the
+      # front matter, only tools the connector really has, the plugin marker with
+      # the manifest's version, the approval rule in every skill, the size limits
+      # and the hygiene rules (no credential reads, no package launchers).
+      # Stdlib only; the runner's python3 is enough.
+      - name: Structural tests
+        run: python3 -m unittest discover -s tests -v
+
+      # The directory scanner holds a download-and-execute pattern ANYWHERE in
+      # the repository, including a README that quotes the command. This job's
+      # own file is excluded: the comment at the top describes the pattern in
+      # prose and must not trip its own check.
+      - name: No download-and-execute pattern
+        run: |
+          set -uo pipefail
+          hits=$(grep -rInE '(curl|wget)[^|;]*\|[[:space:]]*(sudo[[:space:]]+)?(ba)?sh' . \
+                   --exclude-dir=.git --exclude=checks.yml || true)
+          if [ -n "$hits" ]; then
+            echo "$hits"
+            echo "::error::a download-and-execute pattern is back. The plugin directory's scanner holds this for review wherever it appears, including in prose. Describe the command instead of quoting it."
+            exit 1
+          fi
+          echo "ok  no piped-installer pattern"
+
+      # A manifest AHEAD of the latest tag is the normal pre-release state and
+      # passes. A manifest BEHIND one means a bump was missed, and the published
+      # listing would then not match the tag.
+      - name: Manifest version is not behind the latest tag
+        run: |
+          set -euo pipefail
+          manifest=$(jq -r .version .claude-plugin/plugin.json)
+          tag=$(git tag --sort=-v:refname | head -1 || true)
+          echo "manifest $manifest | latest tag ${tag:-(none)}"
+          if [ -z "$tag" ]; then echo "ok  no tags yet"; exit 0; fi
+          bare=${tag#v}
+          lowest=$(printf '%s\n%s\n' "$manifest" "$bare" | sort -V | head -1)
+          if [ "$manifest" = "$bare" ]; then
+            echo "ok  manifest equals the latest tag"
+          elif [ "$lowest" = "$bare" ]; then
+            echo "ok  manifest is ahead of $tag — an unreleased bump"
+          else
+            echo "::error::the manifest ($manifest) is BEHIND the latest tag ($tag). Bump .claude-plugin/plugin.json before tagging."
+            exit 1
+          fi

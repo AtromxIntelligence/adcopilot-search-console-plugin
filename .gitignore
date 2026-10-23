@@ -1,0 +1,16 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Local Claude Code state — never part of the plugin
+.claude/settings.local.json
+
+# Local evaluation output — never part of the plugin
+evals/results/
+
+# Python's compiled files, written by a local test run — never part of the
+# plugin. A plugin install copies the repository, and a .pyc records the path
+# of the machine it was compiled on.
+__pycache__/
+*.pyc
+*.py[cod]

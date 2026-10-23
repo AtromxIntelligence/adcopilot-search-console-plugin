@@ -1,0 +1,56 @@
+name: leak-check
+
+# gitleaks over every commit of this public repository, on each push to main
+# and each pull request. It sits beside GitHub's own secret scanning and push
+# protection (switched on in the repository settings), which match the token
+# formats providers register with GitHub; gitleaks adds its own rules and fails
+# the check.
+#
+# Nothing is fetched by a script and handed to a shell: gitleaks runs from its
+# published image, pinned by digest, and the job reads no secret.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  gitleaks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # every commit, not only the tip
+          persist-credentials: false
+
+      - name: gitleaks, every commit
+        env:
+          IMAGE: ghcr.io/gitleaks/gitleaks:v8.30.1@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f
+        run: |
+          set -uo pipefail
+          log="$RUNNER_TEMP/gitleaks.log"
+          # As the runner's own user: as root, git refuses a checkout another
+          # user owns ("dubious ownership"), and gitleaks then scans no commit
+          # and still exits 0.
+          docker run --rm --user "$(id -u):$(id -g)" \
+            -v "$GITHUB_WORKSPACE:/repo:ro" -w /repo "$IMAGE" \
+            git --redact --no-banner --verbose --exit-code 1 . >"$log" 2>&1
+          rc=$?
+          cat "$log"
+          if [ "$rc" -ne 0 ]; then
+            echo "::error::gitleaks exited $rc: a possible secret, or a failed scan. Remove the value from the branch, and if it was real, revoke it: removing a commit does not unpublish it."
+            exit "$rc"
+          fi
+          # A clean result only counts if the scan read something.
+          if grep -q 'ERR' "$log"; then
+            echo "::error::gitleaks logged an error, so its clean result cannot be trusted."
+            exit 1
+          fi
+          if ! grep -Eq '[1-9][0-9]* commits scanned' "$log"; then
+            echo "::error::gitleaks scanned no commits, so its clean result means nothing."
+            exit 1
+          fi

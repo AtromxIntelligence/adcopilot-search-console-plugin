@@ -1,0 +1,35 @@
+{
+  "name": "adcopilot-search-console",
+  "version": "0.1.0",
+  "description": "SEO, Search Console, keywords, indexing and page experience from your AI client. AdCopilot reads your Google Search Console to show which searches and pages earn clicks, the queries you nearly rank for, why a page is or is not indexed, whether Google reads your sitemap, and how mobile and desktop compare. It proposes any change first, such as submitting a sitemap, and makes it only on your yes. Made by Atromx Intelligence, not by Google.",
+  "author": {
+    "name": "Atromx Intelligence",
+    "url": "https://adcopilot.cloud"
+  },
+  "homepage": "https://adcopilot.cloud",
+  "documentationUrl": "https://adcopilot.cloud/docs/",
+  "privacyPolicyUrl": "https://adcopilot.cloud/privacy",
+  "termsOfServiceUrl": "https://adcopilot.cloud/terms",
+  "supportUrl": "https://github.com/AtromxIntelligence/adcopilot-search-console-plugin/issues",
+  "repository": "https://github.com/AtromxIntelligence/adcopilot-search-console-plugin",
+  "license": "MIT",
+  "keywords": [
+    "seo",
+    "search-console",
+    "google-search-console",
+    "keywords",
+    "search-queries",
+    "indexing",
+    "page-indexing",
+    "sitemaps",
+    "url-inspection",
+    "organic-search",
+    "search-performance",
+    "page-experience",
+    "click-through-rate",
+    "adcopilot",
+    "mcp"
+  ],
+  "displayName": "AdCopilot for Google Search Console (SEO)",
+  "icon": "./.claude-plugin/icon.png"
+}
