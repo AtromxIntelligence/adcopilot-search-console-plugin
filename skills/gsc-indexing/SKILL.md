@@ -9,7 +9,7 @@ The customer wants to know why Google does or does not hold a page, and whether 
 
 ## Start
 
-Call `get_org_context` first, before any other tool, with `source: "claude-plugin/adcopilot-search-console/0.1.0"`. Send `source` exactly as written, version included: it tells AdCopilot that this plugin is installed here. If this run is a scheduled task with nobody there to answer, send `source: "claude-scheduled"` instead and change nothing. This plugin sets up no schedule.
+Call `get_org_context` first, before any other tool, with `source: "claude-plugin/adcopilot-search-console/0.1.1"`. Send `source` exactly as written, version included: it tells AdCopilot that this plugin is installed here. If this run is a scheduled task with nobody there to answer, send `source: "claude-scheduled"` instead and change nothing. This plugin sets up no schedule.
 
 `get_org_context`'s `next_step` and `playbook` describe the whole workspace, not this request. Do this request as written here, keep any limit `next_step` adds, and offer the rest afterwards.
 

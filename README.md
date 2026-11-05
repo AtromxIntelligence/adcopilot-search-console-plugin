@@ -13,7 +13,7 @@ What AdCopilot cannot read today, and says so in every answer that needs it: Cor
 
 Made by Atromx Intelligence (https://adcopilot.cloud). Not affiliated with or endorsed by Google. Google and Google Search Console are trademarks of Google LLC. This plugin is not related to other products named AdCopilot.
 
-The plugin is free (MIT). The AdCopilot connector is a hosted service: Free plan available; paid plans on https://adcopilot.cloud/pricing
+The plugin is MIT licensed. The AdCopilot connector it brings is a hosted service, so you need an AdCopilot account to use it.
 
 ## Install
 
@@ -69,6 +69,17 @@ It will not change anything without your explicit yes in the conversation; each 
 
 The plugin is instructions only: it runs no code and sends nothing anywhere itself. The AdCopilot connector at mcp.adcopilot.cloud reads and, on your yes, writes your Google products through Google's APIs with your Google sign-in. The [privacy policy](https://adcopilot.cloud/privacy) and the [terms](https://adcopilot.cloud/terms) say what it stores. The plugin holds no key, token or password and reads none from your machine.
 
+## Example prompts
+
+After you sign in, ask in your own words. For example:
+
+- "How did my site do in Google search over the last 28 days, and which queries and pages earned the clicks?"
+- "Which queries do I nearly rank for, and which of my pages should I improve first?"
+- "Does Google read my sitemap, and is the page https://example.com/blog/my-post indexed?"
+- "Which searches am I paying for in Google Ads that my site already ranks for?"
+
+Or type a command: `seo-check` for a short read of your site, or `inspect` with one page's address.
+
 ## Support
 
 - Something wrong with the plugin: [open an issue](https://github.com/AtromxIntelligence/adcopilot-search-console-plugin/issues).
@@ -76,12 +87,10 @@ The plugin is instructions only: it runs no code and sends nothing anywhere itse
 
 ## Version
 
-**0.1.0 (2026-10-23, written against AdCopilot v2.44.0, live since 2026-10-22)** is the first release: three commands, four skills and the connector registration. Every tool name a skill uses was checked on 2026-10-23 against the connector's tool registry and its live tool list, and the Google facts the skills rely on against Google's own help and API pages the same day. The checks run for this release are the structural tests and `claude plugin validate --strict`. No model-driven evaluation was run, and the plugin has not yet been run in a real customer's conversation.
+**0.1.1 (2026-11-05)** changes nothing you use. The plugin folder now holds only the files Claude loads.
+
+**0.1.0 (2026-10-23, written against AdCopilot v2.44.0, live since 2026-10-22)** is the first release: three commands, four skills and the connector registration. Every tool name a skill uses was checked on 2026-10-23 against the connector's tool registry and its live tool list, and the Google facts the skills rely on against Google's own help and API pages the same day.
 
 ## Licence
 
 MIT. Copyright Atromx Intelligence Private Limited. See [LICENSE](LICENSE).
-
-## What CI runs
-
-Two workflows run on every push to `main` and every pull request, and neither reads a secret. `checks.yml` runs `claude plugin validate --strict` (Claude Code installed from npm at a pinned version), checks that the JSON files parse and that every skill and command has a name and a description, runs the tests in `tests/` (manifest, front matter, real tool names only, the plugin marker, size limits, no credential reads, no package launchers), and checks that no download-and-execute pattern is present and the manifest version is not behind the latest tag. `leak-check.yml` runs gitleaks over every commit.
