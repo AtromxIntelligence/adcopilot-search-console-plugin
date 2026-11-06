@@ -84,6 +84,7 @@ Or type a command: `seo-check` for a short read of your site, or `inspect` with 
 
 - Something wrong with the plugin: [open an issue](https://github.com/AtromxIntelligence/adcopilot-search-console-plugin/issues).
 - Something wrong with the connector (sign-in, a tool, your account): support@adcopilot.cloud.
+- A security problem in the plugin or the connector: report it to support@adcopilot.cloud.
 
 ## Version
 
