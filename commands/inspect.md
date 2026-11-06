@@ -1,5 +1,4 @@
 ---
-name: inspect
 description: Inspect one page's index status in Google, from Search Console's URL Inspection, and say what to do about it.
 ---
 

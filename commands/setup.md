@@ -1,5 +1,4 @@
 ---
-name: setup
 description: Check the AdCopilot connector is connected and signed in, say whether Search Console is connected, and name the first thing to ask.
 ---
 

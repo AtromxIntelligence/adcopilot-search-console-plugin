@@ -1,5 +1,4 @@
 ---
-name: seo-check
 description: A short SEO check of the customer's site from Search Console, with at most three findings and one proposed change.
 ---
 
