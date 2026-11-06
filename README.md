@@ -63,7 +63,7 @@ Every skill starts with `get_org_context`, which tells AdCopilot this plugin is 
 
 ## What it will not do
 
-It will not change anything without your explicit yes in the conversation; each change is proposed first, with what it changes and how to undo it. It never deletes anything. It does not read Core Web Vitals, the HTTPS report, manual actions, security issues, other search engines or rank trackers. It schedules nothing, sends no email and changes no page on your site.
+It will not change anything without your explicit yes in the conversation; each change is proposed first, with what it changes and how to undo it. It never deletes anything: AdCopilot has no Search Console tool that deletes, and this plugin only reads Google Ads. It does not read Core Web Vitals, the HTTPS report, manual actions, security issues, other search engines or rank trackers. It schedules nothing, sends no email and changes no page on your site.
 
 ## Data
 
