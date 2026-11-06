@@ -2,8 +2,8 @@
 .DS_Store
 Thumbs.db
 
-# Local Claude Code state — never part of the plugin
-.claude/settings.local.json
+# Local client state — never part of the plugin
+*.local.json
 
 # Local evaluation output — never part of the plugin
 evals/results/
